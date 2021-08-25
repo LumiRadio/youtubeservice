@@ -1,0 +1,35 @@
+[package]
+name = "youtubeservice"
+version = "0.1.0"
+edition = "2018"
+
+[[bin]]
+name = "youtubeservice-server"
+path = "src/server.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tonic = "0.5"
+prost = "0.8"
+futures-core = "0.3"
+futures-util = "0.3"
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros", "sync", "time"] }
+tokio-stream = "0.1"
+async-stream = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rand = "0.7"
+prost-types = "0.8"
+async-channel = "1.6.1"
+google-youtube3 = "2.0.4+20210330"
+hyper = "^0.14"
+hyper-rustls = "^0.22"
+yup-oauth2 = "^5.0"
+fern = { version = "0.6.0", features = ["syslog-4", "colored"] }
+syslog = "^4.0.1"
+log = "0.4"
+chrono = "0.4.19"
+
+[build-dependencies]
+tonic-build = "0.5"
