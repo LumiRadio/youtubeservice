@@ -138,6 +138,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c59e7af012c713f529e7a3ee57ce9b31ddd858d4b512923602f74608b009631"
 
 [[package]]
+name = "byteorder"
+version = "1.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14c189c53d098945499cdfa7ecc63567cf3886b3332b312a5b4585d8d3a6a610"
+
+[[package]]
 name = "bytes"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -219,6 +225,47 @@ checksum = "c1a816186fa68d9e426e3cb4ae4dff1fcd8e4a2c34b781bf7a822574a0d0aac8"
 dependencies = [
  "sct",
 ]
+
+[[package]]
+name = "diesel"
+version = "1.4.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bba51ca66f57261fd17cadf8b73e4775cc307d0521d855de3f5de91a8f074e0e"
+dependencies = [
+ "bitflags",
+ "byteorder",
+ "chrono",
+ "diesel_derives",
+ "pq-sys",
+ "r2d2",
+]
+
+[[package]]
+name = "diesel_derives"
+version = "1.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "45f5098f628d02a7a0f68ddba586fb61e80edec3bdc1be3b921f4ceec60858d3"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "diesel_migrations"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf3cde8413353dc7f5d72fa8ce0b99a560a359d2c5ef1e5817ca731cd9008f4c"
+dependencies = [
+ "migrations_internals",
+ "migrations_macros",
+]
+
+[[package]]
+name = "dotenv"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
 
 [[package]]
 name = "either"
@@ -576,6 +623,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "instant"
+version = "0.1.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bee0328b1209d157ef001c94dd85b4f8f64139adb0eac2659f4b08382b2f474d"
+dependencies = [
+ "cfg-if",
+]
+
+[[package]]
 name = "itertools"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -612,6 +668,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a1fa8cddc8fbbee11227ef194b5317ed014b8acbf15139bd716a18ad3fe99ec5"
 
 [[package]]
+name = "lock_api"
+version = "0.4.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0382880606dff6d15c9476c416d18690b72742aa7b605bb6dd6ec9030fbf07eb"
+dependencies = [
+ "scopeguard",
+]
+
+[[package]]
 name = "log"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -640,6 +705,27 @@ name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
+
+[[package]]
+name = "migrations_internals"
+version = "1.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b4fc84e4af020b837029e017966f86a1c2d5e83e64b589963d5047525995860"
+dependencies = [
+ "diesel",
+]
+
+[[package]]
+name = "migrations_macros"
+version = "1.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9753f12909fd8d923f75ae5c3258cae1ed3c8ec052e1b38c93c21a6d157f789c"
+dependencies = [
+ "migrations_internals",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "mime"
@@ -748,6 +834,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28988d872ab76095a6e6ac88d99b54fd267702734fd7ffe610ca27f533ddb95a"
 
 [[package]]
+name = "parking_lot"
+version = "0.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d7744ac029df22dca6284efe4e898991d28e3085c706c972bcd7da4a27a15eb"
+dependencies = [
+ "instant",
+ "lock_api",
+ "parking_lot_core",
+]
+
+[[package]]
+name = "parking_lot_core"
+version = "0.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fa7a782938e745763fe6907fc6ba86946d72f49fe7e21de074e08128a99fb018"
+dependencies = [
+ "cfg-if",
+ "instant",
+ "libc",
+ "redox_syscall",
+ "smallvec",
+ "winapi",
+]
+
+[[package]]
 name = "percent-encoding"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -806,6 +917,15 @@ name = "ppv-lite86"
 version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ac74c624d6b2d21f425f752262f42188365d7b8ff1aff74c82e45136510a4857"
+
+[[package]]
+name = "pq-sys"
+version = "0.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ac25eee5a0582f45a67e837e350d784e7003bd29a5f460796772061ca49ffda"
+dependencies = [
+ "vcpkg",
+]
 
 [[package]]
 name = "proc-macro-hack"
@@ -886,6 +1006,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3d0b9745dc2debf507c8422de05d7226cc1f0644216dfdfead988f9b1ab32a7"
 dependencies = [
  "proc-macro2",
+]
+
+[[package]]
+name = "r2d2"
+version = "0.8.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "545c5bc2b880973c9c10e4067418407a0ccaa3091781d1671d46eb35107cb26f"
+dependencies = [
+ "log 0.4.14",
+ "parking_lot",
+ "scheduled-thread-pool",
 ]
 
 [[package]]
@@ -1050,6 +1181,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "scheduled-thread-pool"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc6f74fd1204073fa02d5d5d68bec8021be4c38690b61264b2fdb48083d0e7d7"
+dependencies = [
+ "parking_lot",
+]
+
+[[package]]
+name = "scopeguard"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
+
+[[package]]
 name = "sct"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1124,6 +1270,12 @@ name = "slab"
 version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c307a32c1c5c437f38c7fd45d753050587732ba8628319fbdf12a7e289ccc590"
+
+[[package]]
+name = "smallvec"
+version = "1.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe0f37c9e8f3c5a4a66ad655a93c74daac4ad00c441533bf5c6e7990bb42604e"
 
 [[package]]
 name = "socket2"
@@ -1458,6 +1610,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "vcpkg"
+version = "0.2.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
+
+[[package]]
 name = "want"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1593,6 +1751,9 @@ dependencies = [
  "async-channel",
  "async-stream 0.2.1",
  "chrono",
+ "diesel",
+ "diesel_migrations",
+ "dotenv",
  "fern",
  "futures-core",
  "futures-util",
@@ -1602,6 +1763,7 @@ dependencies = [
  "log 0.4.14",
  "prost",
  "prost-types",
+ "r2d2",
  "rand 0.7.3",
  "serde",
  "serde_json",

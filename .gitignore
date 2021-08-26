@@ -1,5 +1,5 @@
 /target
 clientsecret.json
-tokencache.json
+tokencache*.json
 .env
 .vscode

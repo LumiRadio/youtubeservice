@@ -30,6 +30,10 @@ fern = { version = "0.6.0", features = ["syslog-4", "colored"] }
 syslog = "^4.0.1"
 log = "0.4"
 chrono = "0.4.19"
+diesel = { version = "1.4.7", features = ["postgres", "r2d2", "chrono"] }
+diesel_migrations = "1.4.0"
+dotenv = "0.15.0"
+r2d2 = "0.8.9"
 
 [build-dependencies]
 tonic-build = "0.5"
