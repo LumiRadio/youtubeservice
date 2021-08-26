@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate diesel;
+#[macro_use]
+extern crate diesel_migrations;
 
 use std::env;
 use std::net::SocketAddr;
@@ -24,6 +26,8 @@ mod log;
 mod models;
 mod schema;
 mod youtube;
+
+embed_migrations!();
 
 pub mod youtube_service {
     use crate::models::LivechatMessage;
@@ -235,6 +239,7 @@ async fn fetch_messages(
     let mut livechat_id_clone = livechat_id.clone();
     // Initialize the page token to be empty
     let mut page_token: Option<String> = None;
+    let mut rx = tx.subscribe();
     // Loop forever or until the future is cancelled
     loop {
         // Prepare the query to the YouTube API
@@ -310,6 +315,7 @@ async fn fetch_messages(
                 nanos: received_at.timestamp_subsec_nanos() as i32,
             };
             let message_id = msg.id.unwrap();
+            debug!("Processing message {}", message_id);
 
             // Match the message type to cover more than just chat messages
             match message_type.as_str() {
@@ -329,13 +335,16 @@ async fn fetch_messages(
                     if let Err(e) = insert_result {
                         error!("Error while inserting chat message: {}", e);
                     }
+                    debug!("Sending message...");
                     tx.send(chat_message)?;
+                    let _ = rx.recv().await;
                 }
                 _ => {}
             }
         }
 
         // Wait for the amount of time specified by the API before requesting again
+        debug!("Waiting for {}ms before requesting again", wait_for_millis);
         tokio::time::sleep(Duration::from_millis(wait_for_millis.into())).await;
     }
 }
@@ -346,6 +355,10 @@ pub fn connect_to_database() -> Pool<ConnectionManager<PgConnection>> {
     let manager = ConnectionManager::new(database_url);
     // Create a connection pool of 10 connections
     let pool = Pool::builder().max_size(10).build(manager).unwrap();
+
+    // Run migrations
+    let _ = embedded_migrations::run_with_output(&pool.get().unwrap(), &mut std::io::stdout());
+
     return pool;
 }
 
