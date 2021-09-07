@@ -31,7 +31,7 @@ FROM rust:1.54.0-slim-buster
 # copy the build artifact from the build stage
 COPY --from=build /youtubeservice/target/release/youtubeservice-server .
 
-RUN apt update && apt install -y libpq-dev
+RUN apt update && apt install -y libpq-dev wait-for-it
 
 # set the startup command to run your binary
 CMD ["./youtubeservice-server"]
