@@ -165,12 +165,12 @@ impl YouTubeService for YouTubeServiceImpl {
         tokio::spawn(async move {
             while let Ok(message) = message_rx.recv().await {
                 if tx.is_closed() {
-                    println!("Ending channel...");
+                    debug!("Someone closed the channel. Good bye!");
                     break;
                 }
 
                 if let Err(e) = tx.send(Ok(message)).await {
-                    println!("Error sending message: {}", e);
+                    error!("Error sending message: {}", e);
                 }
             }
         });
