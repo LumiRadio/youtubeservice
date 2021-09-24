@@ -13,7 +13,7 @@ pub fn setup_log(verbose: bool) {
         .info(Color::Green)
         .debug(Color::White)
         .trace(Color::BrightBlack);
-    let colors_level = colors_line.clone().info(Color::Green);
+    let colors_level = colors_line.info(Color::Green);
 
     fern::Dispatch::new()
         .chain(
