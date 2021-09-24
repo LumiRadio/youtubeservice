@@ -37,14 +37,14 @@ impl From<YouTubeChatMessage> for InsertLivechatMessage {
             received_at_ts.seconds,
             received_at_ts.nanos.try_into().unwrap(),
         );
-        return InsertLivechatMessage {
+        InsertLivechatMessage {
             channel_id: msg.channel_id,
             display_name: msg.display_name,
             message: msg.message,
             sent_at: sent_at_chrono,
             received_at: received_at_chrono,
             youtube_id: msg.message_id,
-        };
+        }
     }
 }
 
@@ -58,13 +58,13 @@ impl From<&YouTubeChatMessage> for InsertLivechatMessage {
             received_at_ts.seconds,
             received_at_ts.nanos.try_into().unwrap(),
         );
-        return InsertLivechatMessage {
+        InsertLivechatMessage {
             channel_id: msg.channel_id.clone(),
             display_name: msg.display_name.clone(),
             message: msg.message.clone(),
             sent_at: sent_at_chrono,
             received_at: received_at_chrono,
             youtube_id: msg.message_id.clone(),
-        };
+        }
     }
 }

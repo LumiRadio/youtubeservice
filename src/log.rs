@@ -48,38 +48,38 @@ pub async fn log_google_errors(error: google_youtube3::Error) -> String {
         google_youtube3::Error::BadRequest(bad_request) => {
             let message = format!("BadRequest: {}", bad_request.error.message);
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::Failure(failure) => {
             let body_string = body_to_string(failure).await;
             let message = format!("Failure: {}", body_string);
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::FieldClash(field_clash) => {
             let message = format!("FieldClash: {}", field_clash);
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::HttpError(http_error) => {
             let message = format!("HttpError: {}", http_error);
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::Io(io_error) => {
             let message = format!("IOError: {}", io_error);
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::JsonDecodeError(body, json_error) => {
             let message = format!("JsonDecodeError: {}, body: {}", json_error, body);
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::MissingToken(missing_token) => {
             let message = format!("MissingToken: {}", missing_token);
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::UploadSizeLimitExceeded(uploaded_size, max_size) => {
             let message = format!(
@@ -87,17 +87,17 @@ pub async fn log_google_errors(error: google_youtube3::Error) -> String {
                 uploaded_size, max_size
             );
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::MissingAPIKey => {
-            let message = format!("MissingAPIKey");
+            let message = "MissingAPIKey".to_string();
             error!("{}", message);
-            return message;
+            message
         }
         google_youtube3::Error::Cancelled => {
-            let message = format!("Cancelled");
+            let message = "Cancelled".to_string();
             error!("{}", message);
-            return message;
+            message
         }
     }
 }

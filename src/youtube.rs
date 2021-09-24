@@ -9,7 +9,7 @@ pub async fn body_to_string(mut response: Response<Body>) -> String {
     let body_bytes = hyper::body::to_bytes(response.body_mut())
         .await
         .expect("msg");
-    return String::from_utf8(body_bytes.to_vec()).unwrap();
+    String::from_utf8(body_bytes.to_vec()).unwrap()
 }
 
 /// Creates an authenticator that works with the device flow and immediately requests a token for the youtube scope.
@@ -56,7 +56,7 @@ pub async fn authenticate_google() -> Result<(YouTube, YouTube), Box<dyn std::er
         hyper::Client::builder().build(hyper_rustls::HttpsConnector::with_native_roots()),
         streamer_auth,
     );
-    return Ok((bot_hub, streamer_hub));
+    Ok((bot_hub, streamer_hub))
 }
 
 /// Get the livechat id for the currently signed in user of the hub.
@@ -77,14 +77,14 @@ pub async fn get_livechat_id(hub: &YouTube) -> Option<String> {
 
     match items {
         Some(broadcasts) => {
-            if broadcasts.len() == 0 {
+            if broadcasts.is_empty() {
                 return None;
             }
             let first_broadcast = broadcasts.get(0).unwrap();
             let snippet_option = &first_broadcast.snippet;
             let snippet = snippet_option.as_ref().unwrap();
-            return snippet.live_chat_id.clone();
+            snippet.live_chat_id.clone()
         }
-        None => return None,
+        None => None,
     }
 }

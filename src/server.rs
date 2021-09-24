@@ -45,14 +45,14 @@ pub mod youtube_service {
                 seconds: msg.received_at.timestamp() as i64,
                 nanos: msg.received_at.timestamp_subsec_nanos() as i32,
             };
-            return YouTubeChatMessage {
+            YouTubeChatMessage {
                 channel_id: msg.channel_id,
                 display_name: msg.display_name,
                 message: msg.message,
                 sent_at_timestamp: Some(sent_at_timestamp),
                 received_at_timestamp: Some(received_at_timestamp),
                 message_id: msg.youtube_id,
-            };
+            }
         }
     }
 
@@ -66,14 +66,14 @@ pub mod youtube_service {
                 seconds: msg.received_at.timestamp() as i64,
                 nanos: msg.received_at.timestamp_subsec_nanos() as i32,
             };
-            return YouTubeChatMessage {
+            YouTubeChatMessage {
                 channel_id: msg.channel_id.clone(),
                 display_name: msg.display_name.clone(),
                 message: msg.message.clone(),
                 sent_at_timestamp: Some(sent_at_timestamp),
                 received_at_timestamp: Some(received_at_timestamp),
                 message_id: msg.youtube_id.clone(),
-            };
+            }
         }
     }
 
@@ -144,7 +144,7 @@ impl YouTubeService for YouTubeServiceImpl {
             let error_message = log_google_errors(e).await;
             return Err(Status::new(
                 tonic::Code::Internal,
-                format!("{}", error_message),
+                error_message,
             ));
         }
         return Ok(Response::new(()));
@@ -225,7 +225,7 @@ pub fn insert_chat_message(
     diesel::insert_into(schema::livechat_messages::table)
         .values(insert_message)
         .execute(&database_connection.get()?)?;
-    return Ok(());
+    Ok(())
 }
 
 async fn fetch_messages(
@@ -317,29 +317,25 @@ async fn fetch_messages(
             let message_id = msg.id.unwrap();
             debug!("Processing message {}", message_id);
 
-            // Match the message type to cover more than just chat messages
-            match message_type.as_str() {
-                "textMessageEvent" => {
-                    // Create a chat message object, insert it into the database and send it to the broadcast channel
-                    let message_text = message_snippet.display_message.unwrap();
-                    info!("{} >> {}", display_name, message_text);
-                    let chat_message = YouTubeChatMessage {
-                        channel_id,
-                        display_name,
-                        message: message_text,
-                        sent_at_timestamp: Some(sent_at_timestamp),
-                        received_at_timestamp: Some(received_at_timestamp),
-                        message_id,
-                    };
-                    let insert_result = insert_chat_message(&pool, &chat_message);
-                    if let Err(e) = insert_result {
-                        error!("Error while inserting chat message: {}", e);
-                    }
-                    debug!("Sending message...");
-                    tx.send(chat_message)?;
-                    let _ = rx.recv().await;
+            if message_type.as_str() == "textMessageEvent" {
+                // Create a chat message object, insert it into the database and send it to the broadcast channel
+                let message_text = message_snippet.display_message.unwrap();
+                info!("{} >> {}", display_name, message_text);
+                let chat_message = YouTubeChatMessage {
+                    channel_id,
+                    display_name,
+                    message: message_text,
+                    sent_at_timestamp: Some(sent_at_timestamp),
+                    received_at_timestamp: Some(received_at_timestamp),
+                    message_id,
+                };
+                let insert_result = insert_chat_message(pool, &chat_message);
+                if let Err(e) = insert_result {
+                    error!("Error while inserting chat message: {}", e);
                 }
-                _ => {}
+                debug!("Sending message...");
+                tx.send(chat_message)?;
+                let _ = rx.recv().await;
             }
         }
 
@@ -359,7 +355,7 @@ pub fn connect_to_database() -> Pool<ConnectionManager<PgConnection>> {
     // Run migrations
     let _ = embedded_migrations::run_with_output(&pool.get().unwrap(), &mut std::io::stdout());
 
-    return pool;
+    pool
 }
 
 #[tokio::main]
@@ -426,5 +422,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         fetch_messages(&bot_hub_arc, &streamer_hub_arc, livechat_id, tx, &db_connection)
     );
 
-    return Ok(());
+    Ok(())
 }
